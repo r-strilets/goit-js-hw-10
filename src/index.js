@@ -12,16 +12,25 @@ inputValue.addEventListener('input', debounce(valueInInput, DEBOUNCE_DELAY));
 function valueInInput(e) {
   let countryName = e.target.value.trim();
   const newFetch = fetchCountries(countryName);
+
   if (countryName)
     newFetch.then(data => {
-      if (data.length >= 2 && data.length <= 10) {
-        data.forEach(element => {
-          countryList.innerHTML = ``;
-          countryList.insertAdjacentHTML(
-            'beforeend',
-            `<li><img src="${element.flags.svg}" alt="" width="30"><span>${element.name}</span></li>`
-          );
-        });
-      }
+      renderData(data);
     });
+}
+function renderData(data) {
+  if (data.length >= 2 && data.length <= 10) {
+    data.forEach(element => {
+      countryList.insertAdjacentHTML(
+        'beforeend',
+        `<li><img src="${element.flags.svg}" alt="" width="30"><span>${element.name}</span></li>`
+      );
+    });
+  }
+  if (data.length === 1) {
+    data.forEach(element => {
+      countryList.innerHTML = `<li><img src="${element.flags.svg}" alt="" width="30"><span>${element.name}</span>
+    <p>Capital: ${element.capital}</p><p>Population: ${element.population}</p><p>Lenguages: ${element.languages}</p></li>`;
+    });
+  }
 }
