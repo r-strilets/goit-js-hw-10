@@ -17,34 +17,33 @@ function valueInInput(e) {
 
   if (countryName)
     newFetch.then(data => {
-      renderData(data);
+      if (data.length >= 2 && data.length <= 10) renderCountryList(data);
+      if (data.length === 1) renderCountryInfo(data);
     });
 }
 
-function renderData(data) {
-  if (data.length >= 2 && data.length <= 10) {
-    const newCountryList = data.reduce((acc, element) => {
-      acc += `<li><img src="${element.flags.svg}" alt="" width="30"><span> ${element.name}</span></li>`;
-      return acc;
-    }, '');
+function renderCountryList(data) {
+  const newCountryList = data.reduce((acc, element) => {
+    acc += `<li><img src="${element.flags.svg}" alt="" width="30"><span> ${element.name}</span></li>`;
+    return acc;
+  }, '');
+  countryList.insertAdjacentHTML('beforeend', newCountryList);
+}
 
-    countryList.insertAdjacentHTML('beforeend', newCountryList);
-  }
-  if (data.length === 1) {
-    countryList.innerHTML = '';
-    const newCountryInfo = data
-      .map(
-        element =>
-          `<img src="${element.flags.svg}" alt="flag" width="30"><span> <b>${
-            element.name
-          }</b></span>
+function renderCountryInfo(data) {
+  countryList.innerHTML = '';
+  const newCountryInfo = data
+    .map(
+      element =>
+        `<img src="${element.flags.svg}" alt="flag" width="30"><span> <b>${
+          element.name
+        }</b></span>
     <p><b>Capital:</b> ${element.capital}</p><p><b>Population:</b> ${
-            element.population
-          }</p><p><b>Lenguages:</b> ${element.languages.map(
-            element => element.name
-          )}</p>`
-      )
-      .join();
-    countryInfo.innerHTML = newCountryInfo;
-  }
+          element.population
+        }</p><p><b>Lenguages:</b> ${element.languages.map(
+          element => element.name
+        )}</p>`
+    )
+    .join();
+  countryInfo.innerHTML = newCountryInfo;
 }
